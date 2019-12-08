@@ -62,6 +62,7 @@ class TocMachine(GraphMachine):
                 if postfix in tz_all[i]:
                     tz_str = tz_str + tz_all[i] + '\n'
 
+        # Sent reply message
         reply_token = event.reply_token
         send_text_message(reply_token, tz_str)
         self.go_back()
@@ -101,25 +102,33 @@ class TocMachine(GraphMachine):
         else:
             reply = postfix + " is already in the list or is not valid input\n" + "Tracking:\n" + tz_str
 
+        # Sent reply message
         reply_token = event.reply_token
-        send_text_message(reply_token, reply)
+        if (len(reply) <= 0 or len(reply) >= 2000):
+            send_text_message(reply_token, "Out of range (not in 0-2000).")
+        else:
+            send_text_message(reply_token, reply)
         self.go_back()
 
     def on_exit_add(self):
         print("Leaving add state")
 
     def on_enter_list(self, event):
-        tz_str = ''
+        reply = ''
 
         fmt = "%Y-%m-%d %H:%M:%S"
 
         # Output all current times based on listed time-zones
         for i in range(len(self.tz_list)):
             cur_time = datetime.now(pytz.timezone(self.tz_list[i]))
-            tz_str = tz_str + self.tz_list[i] + "\n" + cur_time.strftime(fmt) + '\n'
+            reply = reply + self.tz_list[i] + "\n" + cur_time.strftime(fmt) + '\n'
         
+        # Sent reply message
         reply_token = event.reply_token
-        send_text_message(reply_token, "Current time:\n" + tz_str)
+        if (len(reply) <= 0 or len(reply) >= 2000):
+            send_text_message(reply_token, "Out of range (not in 0-2000).")
+        else:
+            send_text_message(reply_token, reply)
         self.go_back()
 
     def on_exit_list(self):
@@ -168,18 +177,22 @@ class TocMachine(GraphMachine):
             print(e)
             input_failed = True
 
-        tz_str = ''
+        reply = ''
 
         # Form output string
         if (input_failed):
-            tz_str = 'input failed'
+            reply = 'input failed'
         else:
             for i in range(len(self.tz_list)):
                 spc_time = dt.astimezone(pytz.timezone(self.tz_list[i]))
-                tz_str = tz_str + self.tz_list[i] + "\n" + spc_time.strftime(fmt) + '\n'
+                reply = reply + self.tz_list[i] + "\n" + spc_time.strftime(fmt) + '\n'
         
+        # Sent reply message
         reply_token = event.reply_token
-        send_text_message(reply_token, "Specific time:\n" + tz_str)
+        if (len(reply) <= 0 or len(reply) >= 2000):
+            send_text_message(reply_token, "Out of range (not in 0-2000).")
+        else:
+            send_text_message(reply_token, reply)
         self.go_back()
 
     def on_exit_show(self):
