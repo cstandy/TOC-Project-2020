@@ -55,9 +55,7 @@ class TocMachine(GraphMachine):
                 tz_str = tz_str + self.tz_list[i] + '\n'
 
         reply_token = event.reply_token
-        send_text_message(reply_token, "Add " + postfix + " success!")
-        reply_token = event.reply_token
-        send_text_message(reply_token, tz_str)
+        send_text_message(reply_token, "Add " + postfix + " success!\n" + tz_str)
         self.go_back()
 
     def on_exit_add(self):
