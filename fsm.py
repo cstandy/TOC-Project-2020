@@ -39,6 +39,8 @@ class TocMachine(GraphMachine):
         tz_all = pytz.all_timezones
         tz_str = ''
 
+        # List all avaliable time-zones
+        # Due to length limit, currently output only Asian
         for i in range(len(pytz.all_timezones)):
             if "Asia" in tz_all[i]:
                 tz_str = tz_str + tz_all[i] + '\n'
@@ -53,20 +55,22 @@ class TocMachine(GraphMachine):
     def on_enter_add(self, event):
         print("I'm entering add state")
 
+        # Get time-zone input
         text = event.message.text
         postfix = text[4:]
 
         tz_all = pytz.all_timezones
         valid_in = False
 
+        # Check input time-zone is avaliable and not already in list
         for i in range(len(pytz.all_timezones)):
             if postfix in tz_all[i]:
                 if tz_all[i] not in self.tz_list:
                     valid_in = True
                     self.tz_list.append(tz_all[i])
 
+        # Form output string
         tz_str = ''
-
         for i in range(len(self.tz_list)):
             tz_str = tz_str + self.tz_list[i] + '\n'
 
@@ -87,6 +91,7 @@ class TocMachine(GraphMachine):
 
         fmt = "%Y-%m-%d %H:%M:%S"
 
+        # Output all current times based on listed time-zones
         for i in range(len(self.tz_list)):
             cur_time = datetime.now(pytz.timezone(self.tz_list[i]))
             tz_str = tz_str + self.tz_list[i] + "\n" + cur_time.strftime(fmt) + '\n'
@@ -115,6 +120,7 @@ class TocMachine(GraphMachine):
         print("Leaving help state")
 
     def on_enter_show(self, event):
+        # Input string pre-processing
         text = event.message.text
         postfix = text[5:]
         tz_in = postfix.split('&')[0]
@@ -122,6 +128,14 @@ class TocMachine(GraphMachine):
 
         fmt = "%Y-%m-%d %H:%M:%S"
         
+        # Search input timezone
+        tz_all = pytz.all_timezones
+        for i in range(len(pytz.all_timezones)):
+            if tz_in in tz_all[i]:
+                tz_in = tz_all[i]
+                break
+
+        # Try to process input string
         try:
             dt = datetime.strptime(time_in, fmt)
             dt = dt.replace(pytz.timezone(tz_in))
@@ -130,6 +144,7 @@ class TocMachine(GraphMachine):
 
         tz_str = ''
 
+        # Form output string
         if (input_failed):
             tz_str = 'input failed'
         else:
