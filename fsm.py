@@ -168,7 +168,7 @@ class TocMachine(GraphMachine):
         postfix = text.split(' ')[0]
         try:
             tz_in = postfix.split('&')[0]
-            time_in = postfix.split(' ')[1]
+            time_in = postfix.split('&')[1]
         except:
             reply_token = event.reply_token
             send_text_message(reply_token, "Invalid input")
