@@ -30,7 +30,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_show(self, event):
         text = event.message.text
-        prefix = text[:4]
+        prefix = text.split(' ')[0]
         return prefix.lower() == "show"
 
     # Auto-binding callback method with 'on_enter_' prefix
@@ -155,9 +155,14 @@ class TocMachine(GraphMachine):
     def on_enter_show(self, event):
         # Input string pre-processing
         text = event.message.text
-        postfix = text[5:]
-        tz_in = postfix.split('&')[0]
-        time_in = postfix.split('&')[1]
+        postfix = text.split(' ')[0]
+        try:
+            tz_in = postfix.split('&')[0]
+            time_in = postfix.split(' ')[1]
+        except:
+            reply_token = event.reply_token
+            send_text_message(reply_token, "Invalid input")
+            self.go_back()
 
         fmt = "%Y-%m-%d %H:%M:%S"
         
