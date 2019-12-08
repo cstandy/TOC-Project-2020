@@ -149,7 +149,7 @@ class TocMachine(GraphMachine):
         info = info + "---- region: eg. US\n"
         info = info + "- add [time-zone]: add time zone\n"
         info = info + "- list: list tracking time zones with current time\n"
-        info = info + "- show [time-zone]&[%Y-%m-%d %H:%M:%S]: show specific time\n"
+        info = info + "- show [time-zone]&[%Y-%m-%d-%H:%M:%S]: show specific time\n"
         info = info + "- erase [region]: erase some or all tracking time zones\n"
         info = info + "- help: get this message again\n"
 
@@ -166,7 +166,8 @@ class TocMachine(GraphMachine):
         # Input string pre-processing
         input_failed = False
         text = event.message.text
-        postfix = text.split(' ')[1]
+        postfix = text[5:] # Since format also has a space, the space cannot be used to cut string
+        # postfix = text.split(' ')[1] + ' ' + text.split(' ')[2]
         try:
             tz_in = postfix.split('&')[0]
             time_in = postfix.split('&')[1]
@@ -234,6 +235,8 @@ class TocMachine(GraphMachine):
             for i in range(len(self.tz_list)):
                 if postfix not in self.tz_list[i]:
                     tmp_list.append(self.tz_list[i])
+        if not tmp_list:
+            tmp_list = ['Asia/Taipei']
         self.tz_list = tmp_list
 
         # Form output string
