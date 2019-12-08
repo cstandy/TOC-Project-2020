@@ -24,7 +24,8 @@ class TocMachine(GraphMachine):
         tz_str = ''
 
         for i in range(len(pytz.all_timezones)):
-            tz_str = tz_str + tz_list[i] + '\n'
+            if "Asia" in tz_list[i]:
+                tz_str = tz_str + tz_list[i] + '\n'
 
         reply_token = event.reply_token
         send_text_message(reply_token, tz_str)
