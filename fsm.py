@@ -139,7 +139,8 @@ class TocMachine(GraphMachine):
         try:
             dt = datetime.strptime(time_in, fmt)
             dt = dt.replace(pytz.timezone(tz_in))
-        except:
+        except Exception as e:
+            print(e)
             input_failed = True
 
         tz_str = ''
