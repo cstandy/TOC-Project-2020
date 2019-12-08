@@ -12,11 +12,12 @@ class TocMachine(GraphMachine):
 
     def is_going_to_search(self, event):
         text = event.message.text
-        return text.lower() == "search"
+        prefix = text.split(' ')[0]
+        return prefix.lower() == "search"
 
     def is_going_to_add(self, event):
         text = event.message.text
-        prefix = text[:3]
+        prefix = text.split(' ')[0]
         return prefix.lower() == "add"
 
     def is_going_to_list(self, event):
@@ -36,14 +37,30 @@ class TocMachine(GraphMachine):
     def on_enter_search(self, event):
         print("I'm entering search state")
 
+        # Get time-zone input
+        text = event.message.text
+        try:
+            postfix = text.split(' ')[1]
+        except:
+            reply_token = event.reply_token
+            send_text_message(reply_token, "Invalid input")
+            self.go_back()
+
         tz_all = pytz.all_timezones
         tz_str = ''
 
         # List all avaliable time-zones
-        # Due to length limit, currently output only Asian
-        for i in range(len(pytz.all_timezones)):
-            if "Asia" in tz_all[i]:
-                tz_str = tz_str + tz_all[i] + '\n'
+        if (postfix == 'all'):
+            for i in range(len(tz_all)):
+                if '/' in tz_all[i]:
+                    if list[i].split('/')[0] not in tz_str:
+                        tz_str = tz_str + list[i].split('/')[0] + '/\n'
+                else:
+                    tz_str = tz_str + tz_all[i] + '\n'
+        else:
+            for i in range(len(tz_all)):
+                if posfix in tz_all[i]
+                    tz_str = tz_str + tz_all[i] + '\n'
 
         reply_token = event.reply_token
         send_text_message(reply_token, tz_str)
@@ -57,7 +74,12 @@ class TocMachine(GraphMachine):
 
         # Get time-zone input
         text = event.message.text
-        postfix = text[4:]
+        try:
+            postfix = text.split(' ')[1]
+        except:
+            reply_token = event.reply_token
+            send_text_message(reply_token, "Invalid input")
+            self.go_back()
 
         tz_all = pytz.all_timezones
         valid_in = False
@@ -106,7 +128,9 @@ class TocMachine(GraphMachine):
     def on_enter_help(self, event):
         
         info = "Usage:\n"
-        info = info + "- search: list all avaliable time-zone (currently Asia)\n"
+        info = info + "- search [region]: list all avaliable time-zone\n"
+        info = info + "---- region: all: list first level\n"
+        info = info + "---- region: eg. US"
         info = info + "- add [time-zone]: add time zone\n"
         info = info + "- list: list tracking time zones with current time\n"
         info = info + "- show [time-zone]&[%Y-%m-%d %H:%M:%S]: show specific time"
