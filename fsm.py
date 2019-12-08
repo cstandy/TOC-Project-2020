@@ -135,6 +135,7 @@ class TocMachine(GraphMachine):
                 tz_in = tz_all[i]
                 break
 
+        input_failed = False
         # Try to process input string
         try:
             dt = datetime.strptime(time_in, fmt)
