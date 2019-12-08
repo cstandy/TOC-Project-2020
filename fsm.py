@@ -236,7 +236,7 @@ class TocMachine(GraphMachine):
         self.tz_list = tmp_list
 
         # Form output string
-        reply = ''
+        reply = 'Erase success!\nTracking:\n'
         for i in range(len(self.tz_list)):
             reply = reply + self.tz_list[i] + '\n'
 
