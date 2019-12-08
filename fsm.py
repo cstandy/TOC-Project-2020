@@ -59,7 +59,7 @@ class TocMachine(GraphMachine):
                     tz_str = tz_str + tz_all[i] + '\n'
         else:
             for i in range(len(tz_all)):
-                if postfix in tz_all[i]
+                if postfix in tz_all[i]:
                     tz_str = tz_str + tz_all[i] + '\n'
 
         reply_token = event.reply_token
