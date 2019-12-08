@@ -7,7 +7,7 @@ import pytz # python time zone package
 class TocMachine(GraphMachine):
     def __init__(self, **machine_configs):
         self.machine = GraphMachine(model=self, **machine_configs)
-        self.tz_list = []
+        self.tz_list = ['Asia/Taipei']
 
     def is_going_to_search(self, event):
         text = event.message.text
@@ -72,7 +72,7 @@ class TocMachine(GraphMachine):
                 tz_str = tz_str + self.tz_list[i] + '\n'
         
         reply_token = event.reply_token
-        send_text_message(reply_token, tz_str)
+        send_text_message(reply_token, "Tracking:\n" + tz_str)
         self.go_back()
 
     def on_exit_list(self):
