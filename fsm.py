@@ -7,6 +7,7 @@ import pytz # python time zone package
 class TocMachine(GraphMachine):
     def __init__(self, **machine_configs):
         self.machine = GraphMachine(model=self, **machine_configs)
+        self.tz_list = []
 
     def is_going_to_search(self, event):
         text = event.message.text
@@ -42,19 +43,20 @@ class TocMachine(GraphMachine):
         postfix = text[4:]
 
         tz_all = pytz.all_timezones
-        tz_list = []
 
         for i in range(len(pytz.all_timezones)):
             if postfix in tz_all[i]:
-                tz_list.append(tz_all[i])
+                if tz_all[i] not in self.tz_list:
+                    self.tz_list.append(tz_all[i])
 
         tz_str = ''
 
-        for i in range(len(tz_list)):
-                tz_str = tz_str + tz_list[i] + '\n'
+        for i in range(len(self.tz_list)):
+                tz_str = tz_str + self.tz_list[i] + '\n'
 
         reply_token = event.reply_token
         send_text_message(reply_token, "Add " + postfix + " success!")
+        reply_token = event.reply_token
         send_text_message(reply_token, tz_str)
         self.go_back()
 
