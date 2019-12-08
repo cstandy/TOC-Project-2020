@@ -48,10 +48,12 @@ class TocMachine(GraphMachine):
         postfix = text[4:]
 
         tz_all = pytz.all_timezones
+        valid_in = False
 
         for i in range(len(pytz.all_timezones)):
             if postfix in tz_all[i]:
                 if tz_all[i] not in self.tz_list:
+                    valid_in = True
                     self.tz_list.append(tz_all[i])
 
         tz_str = ''
@@ -59,8 +61,13 @@ class TocMachine(GraphMachine):
         for i in range(len(self.tz_list)):
             tz_str = tz_str + self.tz_list[i] + '\n'
 
+        if (valid_in):
+            reply = "Add " + postfix + " success!\n" + "Tracking:\n" + tz_str
+        else:
+            reply = postfix + " is already in the list or is not valid input\n" + "Tracking:\n" + tz_str
+
         reply_token = event.reply_token
-        send_text_message(reply_token, "Add " + postfix + " success!\n" + "Tracking:\n" + tz_str)
+        send_text_message(reply_token, reply)
         self.go_back()
 
     def on_exit_add(self):
@@ -69,11 +76,11 @@ class TocMachine(GraphMachine):
     def on_enter_list(self, event):
         tz_str = ''
 
-        fmt = "%Y-%m-%d %H:%M:%S %Z%z"
+        fmt = "%Y-%m-%d %H:%M:%S"
 
         for i in range(len(self.tz_list)):
             cur_time = datetime.now(pytz.timezone(self.tz_list[i]))
-            tz_str = tz_str + self.tz_list[i] + cur_time.strftime(fmt) + '\n'
+            tz_str = tz_str + self.tz_list[i] + "\n" + cur_time.strftime(fmt) + '\n'
         
         reply_token = event.reply_token
         send_text_message(reply_token, "Tracking:\n" + tz_str)
