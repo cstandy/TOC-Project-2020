@@ -161,11 +161,12 @@ class TocMachine(GraphMachine):
         print("Leaving help state")
 
     def on_enter_show(self, event):
-        print("I'm entering help state")
+        print("I'm entering show state")
 
         # Input string pre-processing
+        input_failed = False
         text = event.message.text
-        postfix = text.split(' ')[0]
+        postfix = text.split(' ')[1]
         try:
             tz_in = postfix.split('&')[0]
             time_in = postfix.split('&')[1]
@@ -183,14 +184,14 @@ class TocMachine(GraphMachine):
                 tz_in = tz_all[i]
                 break
 
-        input_failed = False
         # Try to process input string
-        try:
-            dt = datetime.strptime(time_in, fmt)
-            dt = dt.replace(tzinfo=pytz.timezone(tz_in))
-        except Exception as e:
-            print(e)
-            input_failed = True
+        if (input_failed == False)
+            try:
+                dt = datetime.strptime(time_in, fmt)
+                dt = dt.replace(tzinfo=pytz.timezone(tz_in))
+            except Exception as e:
+                print(e)
+                input_failed = True
 
         reply = ''
 
