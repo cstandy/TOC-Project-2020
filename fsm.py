@@ -185,7 +185,7 @@ class TocMachine(GraphMachine):
                 break
 
         # Try to process input string
-        if (input_failed == False)
+        if (input_failed == False):
             try:
                 dt = datetime.strptime(time_in, fmt)
                 dt = dt.replace(tzinfo=pytz.timezone(tz_in))
