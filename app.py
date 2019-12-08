@@ -14,7 +14,7 @@ load_dotenv()
 
 
 machine = TocMachine(
-    states=["user", "search", "add", "list"],
+    states=["user", "search", "add", "list", "help"],
     transitions=[
         {
             "trigger": "advance",
@@ -35,8 +35,14 @@ machine = TocMachine(
             "conditions": "is_going_to_list"
         },
         {
+            "trigger": "advance",
+            "source": "user",
+            "dest": "help",
+            "conditions": "is_going_to_help"
+        },
+        {
             "trigger": "go_back",
-            "source": ["search", "add", "list"],
+            "source": ["search", "add", "list", "help"],
             "dest": "user"
         },
     ],

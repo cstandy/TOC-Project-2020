@@ -23,6 +23,10 @@ class TocMachine(GraphMachine):
         text = event.message.text
         return text.lower() == "list"
 
+    def is_going_to_help(self, event):
+        text = event.message.text
+        return text.lower() == "help"
+
     # Auto-binding callback method with 'on_enter_' prefix
     def on_enter_search(self, event):
         print("I'm entering search state")
@@ -83,8 +87,23 @@ class TocMachine(GraphMachine):
             tz_str = tz_str + self.tz_list[i] + "\n" + cur_time.strftime(fmt) + '\n'
         
         reply_token = event.reply_token
-        send_text_message(reply_token, "Tracking:\n" + tz_str)
+        send_text_message(reply_token, "Current time:\n" + tz_str)
         self.go_back()
 
     def on_exit_list(self):
         print("Leaving list state")
+
+    def on_enter_help(self, event):
+        
+        info = "Usage:\n"
+        info = info + "  search: list all avaliable time-zone (currently Asia)\n"
+        info = info + "  add [time-zone]: add time zone\n"
+        info = info + "  list: list tracking time zones with current time\n"
+        info = info + "  help: get this message again\n"
+
+        reply_token = event.reply_token
+        send_text_message(reply_token, info)
+        self.go_back()
+
+    def on_exit_help(self):
+        print("Leaving help state")
