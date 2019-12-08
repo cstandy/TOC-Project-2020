@@ -53,8 +53,8 @@ class TocMachine(GraphMachine):
         if (postfix == 'all'):
             for i in range(len(tz_all)):
                 if '/' in tz_all[i]:
-                    if list[i].split('/')[0] not in tz_str:
-                        tz_str = tz_str + list[i].split('/')[0] + '/\n'
+                    if tz_all[i].split('/')[0] not in tz_str:
+                        tz_str = tz_str + tz_all[i].split('/')[0] + '/\n'
                 else:
                     tz_str = tz_str + tz_all[i] + '\n'
         else:
