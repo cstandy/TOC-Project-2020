@@ -27,6 +27,11 @@ class TocMachine(GraphMachine):
         text = event.message.text
         return text.lower() == "help"
 
+    def is_going_to_show(self, event):
+        text = event.message.text
+        prefix = text[:4]
+        return prefix.lower() == "show"
+
     # Auto-binding callback method with 'on_enter_' prefix
     def on_enter_search(self, event):
         print("I'm entering search state")
@@ -96,10 +101,11 @@ class TocMachine(GraphMachine):
     def on_enter_help(self, event):
         
         info = "Usage:\n"
-        info = info + "  search: list all avaliable time-zone (currently Asia)\n"
-        info = info + "  add [time-zone]: add time zone\n"
-        info = info + "  list: list tracking time zones with current time\n"
-        info = info + "  help: get this message again\n"
+        info = info + "- search: list all avaliable time-zone (currently Asia)\n"
+        info = info + "- add [time-zone]: add time zone\n"
+        info = info + "- list: list tracking time zones with current time\n"
+        info = info + "- show %Y-%m-%d %H:%M:%S: show specific time"
+        info = info + "- help: get this message again\n"
 
         reply_token = event.reply_token
         send_text_message(reply_token, info)
@@ -107,3 +113,22 @@ class TocMachine(GraphMachine):
 
     def on_exit_help(self):
         print("Leaving help state")
+
+    def on_enter_show(self, event):
+        text = event.message.text
+        postfix = text[5:]
+        fmt = "%Y-%m-%d %H:%M:%S"
+        dt = datetime.strptime(postfix, fmt)
+
+        tz_str = ''
+
+        for i in range(len(self.tz_list)):
+            spc_time = dt.astimezone(pytz.timezone(self.tz_list[i]))
+            tz_str = tz_str + self.tz_list[i] + "\n" + spc_time.strftime(fmt) + '\n'
+        
+        reply_token = event.reply_token
+        send_text_message(reply_token, "Specific time:\n" + tz_str)
+        self.go_back()
+
+    def on_exit_show(self):
+        print("Leaving show state")
