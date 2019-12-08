@@ -18,6 +18,10 @@ class TocMachine(GraphMachine):
         prefix = text[:3]
         return prefix.lower() == "add"
 
+    def is_going_to_list(self, event):
+        text = event.message.text
+        return text.lower() == "list"
+
     # Auto-binding callback method with 'on_enter_' prefix
     def on_enter_search(self, event):
         print("I'm entering search state")
@@ -55,8 +59,21 @@ class TocMachine(GraphMachine):
                 tz_str = tz_str + self.tz_list[i] + '\n'
 
         reply_token = event.reply_token
-        send_text_message(reply_token, "Add " + postfix + " success!\n" + tz_str)
+        send_text_message(reply_token, "Add " + postfix + " success!\n" + "Tracking:\n" + tz_str)
         self.go_back()
 
     def on_exit_add(self):
         print("Leaving add state")
+
+    def on_enter_list(self, event):
+        tz_str = ''
+
+        for i in range(len(self.tz_list)):
+                tz_str = tz_str + self.tz_list[i] + '\n'
+        
+        reply_token = event.reply_token
+        send_text_message(reply_token, tz_str)
+        self.go_back()
+
+    def on_exit_list(self):
+        print("Leaving list state")
