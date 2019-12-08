@@ -33,6 +33,11 @@ class TocMachine(GraphMachine):
         prefix = text.split(' ')[0]
         return prefix.lower() == "show"
 
+    def is_going_to_erase(self, event):
+        text = event.message.text
+        prefix = text.split(' ')[0]
+        return prefix.lower() == "erase"
+
     # Auto-binding callback method with 'on_enter_' prefix
     def on_enter_search(self, event):
         print("I'm entering search state")
@@ -114,6 +119,7 @@ class TocMachine(GraphMachine):
         print("Leaving add state")
 
     def on_enter_list(self, event):
+        print("I'm entering list state")
         reply = ''
 
         fmt = "%Y-%m-%d %H:%M:%S"
@@ -135,14 +141,16 @@ class TocMachine(GraphMachine):
         print("Leaving list state")
 
     def on_enter_help(self, event):
+        print("I'm entering help state")
         
         info = "Usage:\n"
         info = info + "- search [region]: list all avaliable time-zone\n"
         info = info + "---- region: all: list first level\n"
-        info = info + "---- region: eg. US"
+        info = info + "---- region: eg. US\n"
         info = info + "- add [time-zone]: add time zone\n"
         info = info + "- list: list tracking time zones with current time\n"
-        info = info + "- show [time-zone]&[%Y-%m-%d %H:%M:%S]: show specific time"
+        info = info + "- show [time-zone]&[%Y-%m-%d %H:%M:%S]: show specific time\n"
+        info = info + "- erase [region]: erase some or all tracking time zones\n"
         info = info + "- help: get this message again\n"
 
         reply_token = event.reply_token
@@ -153,6 +161,8 @@ class TocMachine(GraphMachine):
         print("Leaving help state")
 
     def on_enter_show(self, event):
+        print("I'm entering help state")
+
         # Input string pre-processing
         text = event.message.text
         postfix = text.split(' ')[0]
@@ -202,3 +212,41 @@ class TocMachine(GraphMachine):
 
     def on_exit_show(self):
         print("Leaving show state")
+
+    def on_enter_erase(self, event):
+        print("I'm entering erase state")
+        
+        # Get time-zone input
+        text = event.message.text
+        try:
+            postfix = text.split(' ')[1]
+        except:
+            reply_token = event.reply_token
+            send_text_message(reply_token, "Invalid input")
+            self.go_back()
+
+        # Erase matched element in tracking list
+        tmp_list = []
+        if (postfix == 'all'):
+            tmp_list = ['Asia/Taipei']
+        else:
+            for i in range(len(self.tz_list)):
+                if postfix not in self.tz_list[i]:
+                    tmp_list.append(self.tz_list[i])
+        self.tz_list = tmp_list
+
+        # Form output string
+        reply = ''
+        for i in range(len(self.tz_list)):
+            reply = reply + self.tz_list[i] + '\n'
+
+        # Sent reply message
+        reply_token = event.reply_token
+        if (len(reply) <= 0 or len(reply) >= 2000):
+            send_text_message(reply_token, "Out of range (not in 0-2000).")
+        else:
+            send_text_message(reply_token, reply)
+        self.go_back()
+
+    def on_exit_erase(self):
+        print("Leaving erase state")
