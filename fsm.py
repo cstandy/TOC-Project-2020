@@ -3,6 +3,7 @@ from transitions.extensions import GraphMachine
 from utils import send_text_message
 
 import pytz # python time zone package
+from datetime import datetime # time processing
 
 class TocMachine(GraphMachine):
     def __init__(self, **machine_configs):
@@ -56,7 +57,7 @@ class TocMachine(GraphMachine):
         tz_str = ''
 
         for i in range(len(self.tz_list)):
-                tz_str = tz_str + self.tz_list[i] + '\n'
+            tz_str = tz_str + self.tz_list[i] + '\n'
 
         reply_token = event.reply_token
         send_text_message(reply_token, "Add " + postfix + " success!\n" + "Tracking:\n" + tz_str)
@@ -68,8 +69,11 @@ class TocMachine(GraphMachine):
     def on_enter_list(self, event):
         tz_str = ''
 
+        fmt = "%Y-%m-%d %H:%M:%S %Z%z"
+
         for i in range(len(self.tz_list)):
-                tz_str = tz_str + self.tz_list[i] + '\n'
+            cur_time = datetime.now(pytz.timezone(self.tz_list[i]))
+            tz_str = tz_str + self.tz_list[i] + cur_time.strftime(fmt) + '\n'
         
         reply_token = event.reply_token
         send_text_message(reply_token, "Tracking:\n" + tz_str)
