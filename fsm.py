@@ -143,15 +143,19 @@ class TocMachine(GraphMachine):
     def on_enter_help(self, event):
         print("I'm entering help state")
         
-        info = "Usage:\n"
-        info = info + "- search [region]: list all avaliable time-zone\n"
-        info = info + "---- region: all: list first level\n"
-        info = info + "---- region: eg. US\n"
-        info = info + "- add [time-zone]: add time zone\n"
-        info = info + "- list: list tracking time zones with current time\n"
-        info = info + "- show [time-zone]&[%Y-%m-%d-%H:%M:%S]: show specific time\n"
-        info = info + "- erase [region]: erase some or all tracking time zones\n"
-        info = info + "- help: get this message again\n"
+        info = ""
+        info = info + "Usage:\n"
+        info = info + "- list: List tracked time zones with current time.\n"
+        info = info + "- search [option]: List all avaliable time-zone.\n"
+        info = info + "---- all: List first level.\n"
+        info = info + "---- region: Unfold certain region, e.g. US.\n"
+        info = info + "- add [time-zone]: Add time zone.\n"
+        info = info + "- show [time-zone]&[%Y-%m-%d %H:%M:%S]: Show specific time.\n"
+        info = info + "---- %Y-%m-%d %H:%M:%S is the time format.\n"
+        info = info + "- erase [option]: Erase some or all tracking time zones.\n"
+        info = info + "---- time-zone: Remove certain region or time zone.\n"
+        info = info + "---- all: Reset to default.\n"
+        info = info + "- help: Get this message again.\n"
 
         reply_token = event.reply_token
         send_text_message(reply_token, info)

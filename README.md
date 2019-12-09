@@ -119,12 +119,12 @@ The default tracked time zone is `Asia/Taipei`.
         Usage:
         - list: List tracked time zones with current time.
         - search [option]: List all avaliable time-zone.
-        ---- all: List first level
+        ---- all: List first level.
         ---- region: Unfold certain region, e.g. US.
         - add [time-zone]: Add time zone.
         - show [time-zone]&[%Y-%m-%d %H:%M:%S]: Show specific time.
-        ---- %Y-%m-%d %H:%M:%S is the time format
-        - erase [option]: Erase some or all tracking time zones
+        ---- %Y-%m-%d %H:%M:%S is the time format.
+        - erase [option]: Erase some or all tracking time zones.
         ---- time-zone: Remove certain region or time zone.
         ---- all: Reset to default.
         - help: Get this message again.
