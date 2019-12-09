@@ -65,7 +65,17 @@ class TocMachine(GraphMachine):
         else:
             for i in range(len(tz_all)):
                 if postfix in tz_all[i]:
-                    tz_str = tz_str + tz_all[i] + '\n'
+                    # Check if the search input is the prefix of the time zone (large region)
+                    if (postfix == tz_all[i].split('/')[0]):
+                        try:
+                            # Remove the prefix region to save word count
+                            prefix = tz_all[i].split('/')[0]
+                            prefix_len = len(prefix)
+                            tz_str = tz_str + tz_all[i][prefix_len:] + '\n'
+                        except:
+                            tz_str = tz_str + tz_all[i] + '\n'
+                    else:
+                        tz_str = tz_str + tz_all[i] + '\n'
 
         # Sent reply message
         reply_token = event.reply_token
