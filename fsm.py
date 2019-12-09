@@ -12,30 +12,36 @@ class TocMachine(GraphMachine):
 
     def is_going_to_search(self, event):
         text = event.message.text
+        text = text.lstrip() # Remove leading white space
         prefix = text.split(' ')[0]
         return prefix.rstrip().lower() == "search"
 
     def is_going_to_add(self, event):
         text = event.message.text
+        text = text.lstrip() # Remove leading white space
         prefix = text.split(' ')[0]
         return prefix.rstrip().lower() == "add"
 
     def is_going_to_list(self, event):
         text = event.message.text
+        text = text.lstrip() # Remove leading white space
         return text.rstrip().lower() == "list"
 
     def is_going_to_help(self, event):
         text = event.message.text
+        text = text.lstrip() # Remove leading white space
         prefix = text.split(' ', 1)[0]
         return prefix.lower() == "help"
 
     def is_going_to_show(self, event):
         text = event.message.text
+        text = text.lstrip() # Remove leading white space
         prefix = text.split(' ', 1)[0]
         return prefix.lower() == "show"
 
     def is_going_to_erase(self, event):
         text = event.message.text
+        text = text.lstrip() # Remove leading white space
         prefix = text.split(' ')[0]
         return prefix.lower() == "erase"
 
@@ -119,12 +125,12 @@ class TocMachine(GraphMachine):
         # Form output string
         tz_str = ''
         for i in range(len(self.tz_list)):
-            tz_str = '\n' + tz_str + self.tz_list[i]
+            tz_str =  tz_str + '\n' + self.tz_list[i]
 
         if (valid_in):
-            reply = "Add " + postfix + " success!\n\n" + "Tracking:" + tz_str
+            reply = "Add " + postfix + " success!\n\n" + "Tracked:" + tz_str
         else:
-            reply = postfix + " is already in the list or is not valid input\n\n" + "Tracking:" + tz_str
+            reply = postfix + " is already in the list or is not valid input\n\n" + "Tracked:" + tz_str
 
         # Sent reply message
         reply_token = event.reply_token
@@ -194,7 +200,7 @@ class TocMachine(GraphMachine):
             info = info + "- search [option]: List all avaliable time-zone.\n"
             info = info + "- add [time-zone]: Add time zone.\n"
             info = info + "- show [time-zone]&[time]: Show specific time.\n"
-            info = info + "- erase [option]: Erase some or all tracking time zones.\n"
+            info = info + "- erase [option]: Erase some or all tracked time zones.\n"
             info = info + "- help [cmd]: Search for the usage of a command."
 
         reply_token = event.reply_token
@@ -294,9 +300,9 @@ class TocMachine(GraphMachine):
         self.tz_list = tmp_list
 
         # Form output string
-        reply = 'Erase success!\n\nTracking:'
+        reply = 'Erase success!\n\nTracked:'
         for i in range(len(self.tz_list)):
-            reply =  '\n' + reply + self.tz_list[i]
+            reply =  reply + '\n' + self.tz_list[i]
 
         # Sent reply message
         reply_token = event.reply_token

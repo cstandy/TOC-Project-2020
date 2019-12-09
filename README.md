@@ -59,7 +59,7 @@ The default tracked time zone is `Asia/Taipei`.
             add Tokyo
         reply:
             Add Tokyo success!
-            Tracking:
+            Tracked:
             Asia/Taipei
             Asia/Tokyo
         ```
@@ -69,7 +69,7 @@ The default tracked time zone is `Asia/Taipei`.
             add US
         reply:
             Add US success!
-            Tracking:
+            Tracked:
             Asia/Taipei
             Asia/Tokyo
             US/Alaska
@@ -95,7 +95,7 @@ The default tracked time zone is `Asia/Taipei`.
             erase Tokyo
         reply:
             Erase success!
-            Tracking:
+            Tracked:
             Asia/Taipei
             US/Alaska
             US/Aleutian
@@ -108,7 +108,7 @@ The default tracked time zone is `Asia/Taipei`.
             erase all
         reply:
             Erase success!
-            Tracking:
+            Tracked:
             Asia/Taipei
         ```
 * `help [cmd]`: Get usage information.
@@ -120,7 +120,7 @@ The default tracked time zone is `Asia/Taipei`.
         - search [option]: List all avaliable time-zone.
         - add [time-zone]: Add time zone.
         - show [time-zone]&[time]: Show specific time.
-        - erase [option]: Erase some or all tracking time zones.
+        - erase [option]: Erase some or all tracked time zones.
         - help [cmd]: Search for the usage of a command.
     ```
     * The 'cmd' is the one listed above.
