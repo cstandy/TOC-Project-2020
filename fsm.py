@@ -48,6 +48,11 @@ class TocMachine(GraphMachine):
         try:
             postfix = text.split(' ')[1]
         except:
+            info = "Invalid input, usage:\n"
+            info = info + "search [option]\n"
+            info = info + "- option: all or time-zone\n"
+            info = info + "e.g. search all\n"
+            info = info + "e.g. search US\n"
             reply_token = event.reply_token
             send_text_message(reply_token, "Invalid input")
             self.go_back()
@@ -94,6 +99,9 @@ class TocMachine(GraphMachine):
         try:
             postfix = text.split(' ')[1]
         except:
+            info = "Invalid input, usage:\n"
+            info = info + "add [time-zone]\n"
+            info = info + "e.g. add ROC\n"
             reply_token = event.reply_token
             send_text_message(reply_token, "Invalid input")
             self.go_back()
@@ -161,12 +169,13 @@ class TocMachine(GraphMachine):
             # Try to get the cmd from 'help cmd'
             postfix = text.split(' ')[1]
             if (postfix == 'list'):
-                info = "e.g. list\n"
+                info = info + "list\n"
+                info = info + "e.g. list\n"
             elif (postfix == 'search'):
-                info = "search [option]\n"
+                info = info + "search [option]\n"
                 info = info + "- option: all or time-zone\n"
                 info = info + "e.g. search all\n"
-                info = info + "e.g. search US"
+                info = info + "e.g. search US\n"
             elif (postfix == 'add'):
                 info = info + "add [time-zone]\n"
                 info = info + "e.g. add ROC\n"
@@ -174,6 +183,7 @@ class TocMachine(GraphMachine):
                 info = info + "show [time-zone] [time]\n"
                 info = info + "e.g. show Tokyo 1600-02-29 13:56\n"
             elif (postfix == 'erase'):
+                info = info + "erase [option]\n"
                 info = info + "- option: all or time-zone\n"
                 info = info + "e.g. erase all\n"
                 info = info + "e.g. erase Tokyo\n"
@@ -203,8 +213,11 @@ class TocMachine(GraphMachine):
             tz_in = text.split(' ', 2)[1]
             time_in = text.split(' ', 2)[2]
         except:
+            info = "Invalid input, usage:\n"
+            info = info + "show [time-zone] [time]\n"
+            info = info + "e.g. show Tokyo 1600-02-29 13:56\n"
             reply_token = event.reply_token
-            send_text_message(reply_token, "Invalid input")
+            send_text_message(reply_token, info)
             self.go_back()
 
         fmt = "%Y-%m-%d %H:%M"
@@ -229,7 +242,10 @@ class TocMachine(GraphMachine):
 
         # Form output string
         if (input_failed):
-            reply = 'Invalid input'
+            info = "Invalid input, usage:\n"
+            info = info + "show [time-zone] [time]\n"
+            info = info + "e.g. show Tokyo 1600-02-29 13:56\n"
+            reply = info
         else:
             for i in range(len(self.tz_list)):
                 spc_time = dt.astimezone(pytz.timezone(self.tz_list[i]))
@@ -254,6 +270,11 @@ class TocMachine(GraphMachine):
         try:
             postfix = text.split(' ')[1]
         except:
+            info = "Invalid input, usage:\n"
+            info = info + "erase [option]\n"
+            info = info + "- option: all or time-zone\n"
+            info = info + "e.g. erase all\n"
+            info = info + "e.g. erase Tokyo\n"
             reply_token = event.reply_token
             send_text_message(reply_token, "Invalid input")
             self.go_back()
