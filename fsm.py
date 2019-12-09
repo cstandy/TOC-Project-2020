@@ -154,18 +154,35 @@ class TocMachine(GraphMachine):
         print("I'm entering help state")
         
         info = ""
-        info = info + "Usage:\n"
-        info = info + "- list: List tracked time zones with current time.\n"
-        info = info + "- search [option]: List all avaliable time-zone.\n"
-        info = info + "---- all: List first level.\n"
-        info = info + "---- region: Unfold certain region, e.g. US.\n"
-        info = info + "- add [time-zone]: Add time zone.\n"
-        info = info + "- show [time-zone]&[%Y-%m-%d %H:%M:%S]: Show specific time.\n"
-        info = info + "---- %Y-%m-%d %H:%M:%S is the time format.\n"
-        info = info + "- erase [option]: Erase some or all tracking time zones.\n"
-        info = info + "---- time-zone: Remove certain region or time zone.\n"
-        info = info + "---- all: Reset to default.\n"
-        info = info + "- help: Get this message again.\n"
+        text = event.message.text
+
+        try:
+            # Try to get the cmd from 'help cmd'
+            postfix = text.split(' ')[1]
+            if (postfix == 'list'):
+                info = "e.g. list\n"
+            elif (postfix == 'search'):
+                info = "search [option]\n"
+                info = info + "- option: all or time-zone\n"
+                info = info + "e.g. search all\n"
+                info = info + "e.g. search US"
+            elif (postfix == 'add'):
+                info = info + "add [time-zone]\n"
+                info = info + "e.g. add ROC\n"
+            elif (postfix == 'show [time-zone]&[time]'):
+                info = info + "e.g. show Tokyo&1600-02-12 12:23:34\n"
+            elif (postfix == 'erase [option]'):
+                info = info + "- option: all or time-zone\n"
+                info = info + "e.g. erase all\n"
+                info = info + "e.g. erase Tokyo\n"
+        except:
+            # If the command is simply 'help'
+            info = info + "- list: List tracked time zones with current time.\n"
+            info = info + "- search [option]: List all avaliable time-zone.\n"
+            info = info + "- add [time-zone]: Add time zone.\n"
+            info = info + "- show [time-zone]&[time]: Show specific time.\n"
+            info = info + "- erase [option]: Erase some or all tracking time zones.\n"
+            info = info + "- help [cmd]: Search for the usage of a command.\n"
 
         reply_token = event.reply_token
         send_text_message(reply_token, info)
