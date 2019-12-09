@@ -54,7 +54,7 @@ class TocMachine(GraphMachine):
             info = info + "e.g. search all\n"
             info = info + "e.g. search US\n"
             reply_token = event.reply_token
-            send_text_message(reply_token, "Invalid input")
+            send_text_message(reply_token, info)
             self.go_back()
 
         tz_all = pytz.all_timezones
@@ -103,7 +103,7 @@ class TocMachine(GraphMachine):
             info = info + "add [time-zone]\n"
             info = info + "e.g. add ROC\n"
             reply_token = event.reply_token
-            send_text_message(reply_token, "Invalid input")
+            send_text_message(reply_token, info)
             self.go_back()
 
         tz_all = pytz.all_timezones
@@ -122,9 +122,9 @@ class TocMachine(GraphMachine):
             tz_str = tz_str + self.tz_list[i] + '\n'
 
         if (valid_in):
-            reply = "Add " + postfix + " success!\n" + "Tracking:\n" + tz_str
+            reply = "Add " + postfix + " success!\n\n" + "Tracking:\n" + tz_str
         else:
-            reply = postfix + " is already in the list or is not valid input\n" + "Tracking:\n" + tz_str
+            reply = postfix + " is already in the list or is not valid input\n\n" + "Tracking:\n" + tz_str
 
         # Sent reply message
         reply_token = event.reply_token
@@ -276,7 +276,7 @@ class TocMachine(GraphMachine):
             info = info + "e.g. erase all\n"
             info = info + "e.g. erase Tokyo\n"
             reply_token = event.reply_token
-            send_text_message(reply_token, "Invalid input")
+            send_text_message(reply_token, info)
             self.go_back()
 
         # Erase matched element in tracking list
