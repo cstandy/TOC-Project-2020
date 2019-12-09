@@ -30,7 +30,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_show(self, event):
         text = event.message.text
-        prefix = text.split(' ')[0]
+        prefix = text.split(' ', 1)[0]
         return prefix.lower() == "show"
 
     def is_going_to_erase(self, event):
@@ -132,7 +132,7 @@ class TocMachine(GraphMachine):
         print("I'm entering list state")
         reply = ''
 
-        fmt = "%Y-%m-%d %H:%M:%S"
+        fmt = "%Y-%m-%d %H:%M"
 
         # Output all current times based on listed time-zones
         for i in range(len(self.tz_list)):
@@ -170,8 +170,8 @@ class TocMachine(GraphMachine):
                 info = info + "add [time-zone]\n"
                 info = info + "e.g. add ROC\n"
             elif (postfix == 'show'):
-                info = info + "show [time-zone]&[time]\n"
-                info = info + "e.g. show Tokyo&1600-02-29 13:56\n"
+                info = info + "show [time-zone] [time]\n"
+                info = info + "e.g. show Tokyo 1600-02-29 13:56\n"
             elif (postfix == 'erase [option]'):
                 info = info + "- option: all or time-zone\n"
                 info = info + "e.g. erase all\n"
@@ -198,11 +198,9 @@ class TocMachine(GraphMachine):
         # Input string pre-processing
         input_failed = False
         text = event.message.text
-        postfix = text[5:] # Since format also has a space, the space cannot be used to cut string
-        # postfix = text.split(' ')[1] + ' ' + text.split(' ')[2]
         try:
-            tz_in = postfix.split('&')[0]
-            time_in = postfix.split('&')[1]
+            tz_in = text.split(' ', 2)[1]
+            time_in = text.split(' ', 2)[2]
         except:
             reply_token = event.reply_token
             send_text_message(reply_token, "Invalid input")
@@ -230,7 +228,7 @@ class TocMachine(GraphMachine):
 
         # Form output string
         if (input_failed):
-            reply = 'input failed'
+            reply = 'Invalid input'
         else:
             for i in range(len(self.tz_list)):
                 spc_time = dt.astimezone(pytz.timezone(self.tz_list[i]))

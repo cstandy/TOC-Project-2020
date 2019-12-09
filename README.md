@@ -128,9 +128,8 @@ The default tracked time zone is `Asia/Taipei`.
     input:
         help show
     reply:
-        show [time-zone]&[time]
-        info = info + "show [time-zone]&[time]\n"
-
+        show [time-zone] [time]
+        e.g. show Tokyo 1600-02-29 13:56
     ```
 
 ## Setup
