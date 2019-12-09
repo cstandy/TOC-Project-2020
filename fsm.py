@@ -52,7 +52,7 @@ class TocMachine(GraphMachine):
             info = info + "search [option]\n"
             info = info + "- option: all or time-zone\n"
             info = info + "e.g. search all\n"
-            info = info + "e.g. search US\n"
+            info = info + "e.g. search US"
             reply_token = event.reply_token
             send_text_message(reply_token, info)
             self.go_back()
@@ -101,7 +101,7 @@ class TocMachine(GraphMachine):
         except:
             info = "Invalid input, usage:\n"
             info = info + "add [time-zone]\n"
-            info = info + "e.g. add ROC\n"
+            info = info + "e.g. add ROC"
             reply_token = event.reply_token
             send_text_message(reply_token, info)
             self.go_back()
@@ -119,12 +119,12 @@ class TocMachine(GraphMachine):
         # Form output string
         tz_str = ''
         for i in range(len(self.tz_list)):
-            tz_str = tz_str + self.tz_list[i] + '\n'
+            tz_str = '\n' + tz_str + self.tz_list[i]
 
         if (valid_in):
-            reply = "Add " + postfix + " success!\n\n" + "Tracking:\n" + tz_str
+            reply = "Add " + postfix + " success!\n\n" + "Tracking:" + tz_str
         else:
-            reply = postfix + " is already in the list or is not valid input\n\n" + "Tracking:\n" + tz_str
+            reply = postfix + " is already in the list or is not valid input\n\n" + "Tracking:" + tz_str
 
         # Sent reply message
         reply_token = event.reply_token
@@ -170,23 +170,23 @@ class TocMachine(GraphMachine):
             postfix = text.split(' ')[1]
             if (postfix == 'list'):
                 info = info + "list\n"
-                info = info + "e.g. list\n"
+                info = info + "e.g. list"
             elif (postfix == 'search'):
                 info = info + "search [option]\n"
                 info = info + "- option: all or time-zone\n"
                 info = info + "e.g. search all\n"
-                info = info + "e.g. search US\n"
+                info = info + "e.g. search US"
             elif (postfix == 'add'):
                 info = info + "add [time-zone]\n"
-                info = info + "e.g. add ROC\n"
+                info = info + "e.g. add ROC"
             elif (postfix == 'show'):
                 info = info + "show [time-zone] [time]\n"
-                info = info + "e.g. show Tokyo 1600-02-29 13:56\n"
+                info = info + "e.g. show Tokyo 1600-02-29 13:56"
             elif (postfix == 'erase'):
                 info = info + "erase [option]\n"
                 info = info + "- option: all or time-zone\n"
                 info = info + "e.g. erase all\n"
-                info = info + "e.g. erase Tokyo\n"
+                info = info + "e.g. erase Tokyo"
         except:
             # If the command is simply 'help'
             info = info + "- list: List tracked time zones with current time.\n"
@@ -194,7 +194,7 @@ class TocMachine(GraphMachine):
             info = info + "- add [time-zone]: Add time zone.\n"
             info = info + "- show [time-zone]&[time]: Show specific time.\n"
             info = info + "- erase [option]: Erase some or all tracking time zones.\n"
-            info = info + "- help [cmd]: Search for the usage of a command.\n"
+            info = info + "- help [cmd]: Search for the usage of a command."
 
         reply_token = event.reply_token
         send_text_message(reply_token, info)
@@ -215,7 +215,7 @@ class TocMachine(GraphMachine):
         except:
             info = "Invalid input, usage:\n"
             info = info + "show [time-zone] [time]\n"
-            info = info + "e.g. show Tokyo 1600-02-29 13:56\n"
+            info = info + "e.g. show Tokyo 1600-02-29 13:56"
             reply_token = event.reply_token
             send_text_message(reply_token, info)
             self.go_back()
@@ -244,7 +244,7 @@ class TocMachine(GraphMachine):
         if (input_failed):
             info = "Invalid input, usage:\n"
             info = info + "show [time-zone] [time]\n"
-            info = info + "e.g. show Tokyo 1600-02-29 13:56\n"
+            info = info + "e.g. show Tokyo 1600-02-29 13:56"
             reply = info
         else:
             for i in range(len(self.tz_list)):
@@ -274,7 +274,7 @@ class TocMachine(GraphMachine):
             info = info + "erase [option]\n"
             info = info + "- option: all or time-zone\n"
             info = info + "e.g. erase all\n"
-            info = info + "e.g. erase Tokyo\n"
+            info = info + "e.g. erase Tokyo"
             reply_token = event.reply_token
             send_text_message(reply_token, info)
             self.go_back()
@@ -292,9 +292,9 @@ class TocMachine(GraphMachine):
         self.tz_list = tmp_list
 
         # Form output string
-        reply = 'Erase success!\nTracking:\n'
+        reply = 'Erase success!\n\nTracking:'
         for i in range(len(self.tz_list)):
-            reply = reply + self.tz_list[i] + '\n'
+            reply =  '\n' + reply + self.tz_list[i]
 
         # Sent reply message
         reply_token = event.reply_token
