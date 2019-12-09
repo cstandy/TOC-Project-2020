@@ -26,7 +26,8 @@ class TocMachine(GraphMachine):
 
     def is_going_to_help(self, event):
         text = event.message.text
-        return text.lower() == "help"
+        prefix = text.split(' ', 1)[0]
+        return prefix.lower() == "help"
 
     def is_going_to_show(self, event):
         text = event.message.text
@@ -172,7 +173,7 @@ class TocMachine(GraphMachine):
             elif (postfix == 'show'):
                 info = info + "show [time-zone] [time]\n"
                 info = info + "e.g. show Tokyo 1600-02-29 13:56\n"
-            elif (postfix == 'erase [option]'):
+            elif (postfix == 'erase'):
                 info = info + "- option: all or time-zone\n"
                 info = info + "e.g. erase all\n"
                 info = info + "e.g. erase Tokyo\n"
