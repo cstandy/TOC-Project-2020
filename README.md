@@ -111,23 +111,26 @@ The default tracked time zone is `Asia/Taipei`.
             Tracking:
             Asia/Taipei
         ```
-* `help`: Get usage information.
+* `help [cmd]`: Get usage information.
     ```
     input:
-        help
+        help 
     reply:
-        Usage:
         - list: List tracked time zones with current time.
         - search [option]: List all avaliable time-zone.
-        ---- all: List first level.
-        ---- region: Unfold certain region, e.g. US.
         - add [time-zone]: Add time zone.
-        - show [time-zone]&[%Y-%m-%d %H:%M:%S]: Show specific time.
-        ---- %Y-%m-%d %H:%M:%S is the time format.
+        - show [time-zone]&[time]: Show specific time.
         - erase [option]: Erase some or all tracking time zones.
-        ---- time-zone: Remove certain region or time zone.
-        ---- all: Reset to default.
-        - help: Get this message again.
+        - help [cmd]: Search for the usage of a command.
+    ```
+    * The 'cmd' is the one listed above.
+    ```
+    input:
+        help show
+    reply:
+        show [time-zone]&[time]
+        info = info + "show [time-zone]&[time]\n"
+
     ```
 
 ## Setup

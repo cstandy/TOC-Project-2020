@@ -169,8 +169,9 @@ class TocMachine(GraphMachine):
             elif (postfix == 'add'):
                 info = info + "add [time-zone]\n"
                 info = info + "e.g. add ROC\n"
-            elif (postfix == 'show [time-zone]&[time]'):
-                info = info + "e.g. show Tokyo&1600-02-12 12:23:34\n"
+            elif (postfix == 'show'):
+                info = info + "show [time-zone]&[time]\n"
+                info = info + "e.g. show Tokyo&1600-02-29 13:56\n"
             elif (postfix == 'erase [option]'):
                 info = info + "- option: all or time-zone\n"
                 info = info + "e.g. erase all\n"
@@ -207,7 +208,7 @@ class TocMachine(GraphMachine):
             send_text_message(reply_token, "Invalid input")
             self.go_back()
 
-        fmt = "%Y-%m-%d %H:%M:%S"
+        fmt = "%Y-%m-%d %H:%M"
         
         # Search input timezone
         tz_all = pytz.all_timezones
