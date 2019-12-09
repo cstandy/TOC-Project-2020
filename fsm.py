@@ -13,16 +13,16 @@ class TocMachine(GraphMachine):
     def is_going_to_search(self, event):
         text = event.message.text
         prefix = text.split(' ')[0]
-        return prefix.lower() == "search"
+        return prefix.rstrip().lower() == "search"
 
     def is_going_to_add(self, event):
         text = event.message.text
         prefix = text.split(' ')[0]
-        return prefix.lower() == "add"
+        return prefix.rstrip().lower() == "add"
 
     def is_going_to_list(self, event):
         text = event.message.text
-        return text.lower() == "list"
+        return text.rstrip().lower() == "list"
 
     def is_going_to_help(self, event):
         text = event.message.text
@@ -46,7 +46,7 @@ class TocMachine(GraphMachine):
         # Get time-zone input
         text = event.message.text
         try:
-            postfix = text.split(' ')[1]
+            postfix = text.split(' ')[1].rstrip()
         except:
             info = "Invalid input, usage:\n"
             info = info + "search [option]\n"
@@ -97,7 +97,7 @@ class TocMachine(GraphMachine):
         # Get time-zone input
         text = event.message.text
         try:
-            postfix = text.split(' ')[1]
+            postfix = text.split(' ')[1].rstrip()
         except:
             info = "Invalid input, usage:\n"
             info = info + "add [time-zone]\n"
@@ -146,8 +146,9 @@ class TocMachine(GraphMachine):
         # Output all current times based on listed time-zones
         for i in range(len(self.tz_list)):
             cur_time = datetime.now(pytz.timezone(self.tz_list[i]))
-            reply = reply + self.tz_list[i] + "\n" + cur_time.strftime(fmt) + '\n'
-        
+            reply = reply + self.tz_list[i] + "\n" + cur_time.strftime(fmt) + "\n"
+        reply = reply.rstrip() # Remove tailing new line
+
         # Sent reply message
         reply_token = event.reply_token
         if (len(reply) <= 0 or len(reply) >= 2000):
@@ -167,7 +168,7 @@ class TocMachine(GraphMachine):
 
         try:
             # Try to get the cmd from 'help cmd'
-            postfix = text.split(' ')[1]
+            postfix = text.split(' ')[1].rstrip()
             if (postfix == 'list'):
                 info = info + "list\n"
                 info = info + "e.g. list"
@@ -250,6 +251,7 @@ class TocMachine(GraphMachine):
             for i in range(len(self.tz_list)):
                 spc_time = dt.astimezone(pytz.timezone(self.tz_list[i]))
                 reply = reply + self.tz_list[i] + "\n" + spc_time.strftime(fmt) + '\n'
+            reply = reply.rstrip() # Remove tailing new line
         
         # Sent reply message
         reply_token = event.reply_token
@@ -268,7 +270,7 @@ class TocMachine(GraphMachine):
         # Get time-zone input
         text = event.message.text
         try:
-            postfix = text.split(' ')[1]
+            postfix = text.split(' ')[1].rstrip()
         except:
             info = "Invalid input, usage:\n"
             info = info + "erase [option]\n"
