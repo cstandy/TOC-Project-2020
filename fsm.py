@@ -50,6 +50,12 @@ class TocMachine(GraphMachine):
 
     # Auto-binding callback method with 'on_enter_' prefix
     def on_enter_search(self, event):
+        '''
+        Search function: Search in all avaliable time zones in hierarchy.
+        For 'search all', only list regions or special areas.
+        For 'search region', match all the string with 'region' in avaliable time zones.
+        While the output is too large to send, reply to user.
+        '''
         print("I'm entering search state")
 
         # Get time-zone input
@@ -107,6 +113,10 @@ class TocMachine(GraphMachine):
         print("Leaving search state")
 
     def on_enter_add(self, event):
+        '''
+        Enable user to add time zone to track (once a time).
+        Like 'search' option, match the argument with all avaliable time zones.
+        '''
         print("I'm entering add state")
 
         # Get time-zone input
@@ -155,6 +165,10 @@ class TocMachine(GraphMachine):
         print("Leaving add state")
 
     def on_enter_list(self, event):
+        '''
+        Provide the basic function of time converter: Check current time of
+        tracked time zones.
+        '''
         print("I'm entering list state")
         reply = ''
 
@@ -178,6 +192,11 @@ class TocMachine(GraphMachine):
         print("Leaving list state")
 
     def on_enter_help(self, event):
+        '''
+        Use button menu instead of text message to show avaliable options.
+        Here is the only part of the code not to use text reply.
+        The image is retrived from https://whatsanswer.com/maps/time-zone-map-of-north-america/
+        '''
         print("I'm entering help state")
         
         info = ""
@@ -193,7 +212,7 @@ class TocMachine(GraphMachine):
             For other unsupported devices (Chrome extension), show unsupported message.
             '''
             info = info + "- list: List tracked time zones with current time.\n"
-            info = info + "- search [option]: List all avaliable time-zone.\n"
+            info = info + "- search [option]: Search in all avaliable time-zone.\n"
             info = info + "- add [time-zone]: Add time zone.\n"
             info = info + "- show [time-zone] [time]: Show specific time.\n"
             info = info + "- erase [option]: Erase some or all tracked time zones.\n"
@@ -250,14 +269,15 @@ class TocMachine(GraphMachine):
             send_button_message(reply_token, buttons)
         else:
             '''
-            For the command 'help cmd', get the postfix and reply the description and usage
+            For the command 'help cmd', get the postfix and reply the
+            description and usage
             '''
             if (postfix == 'list'):
                 info = info + "List tracked time zones with current time.\n\n"
                 info = info + "Usage: list\n\n"
                 info = info + "e.g. list"
             elif (postfix == 'search'):
-                info = info + "List all avaliable time-zone.\n\n"
+                info = info + "Search in all avaliable time-zone.\n\n"
                 info = info + "Usage: search [option]\n"
                 info = info + "- option: all or time-zone\n\n"
                 info = info + "e.g. search all\n"
@@ -286,6 +306,11 @@ class TocMachine(GraphMachine):
         print("Leaving help state")
 
     def on_enter_show(self, event):
+        '''
+        Provide extended function of time zone converter:
+           Show the time of all tracked time zone based on specific time in
+           certain time zone.
+        '''
         print("I'm entering show state")
 
         input_failed = False
@@ -372,6 +397,9 @@ class TocMachine(GraphMachine):
         print("Leaving show state")
 
     def on_enter_erase(self, event):
+        '''
+        Enable the user to remove the time zone which is undesired to track.
+        '''
         print("I'm entering erase state")
         
         # Get time-zone input

@@ -28,7 +28,7 @@ The default tracked time zone is `Asia/Taipei`.
         Asia/Taipei
         2019-12-09 13:25:36
     ```
-* `search [option]`: List all avaliable time-zone.
+* `search [option]`: Search in all avaliable time-zone.
     * `all`: List first level.
         ```
         input:
@@ -142,7 +142,7 @@ The default tracked time zone is `Asia/Taipei`.
         help 
     reply:
         - list: List tracked time zones with current time.
-        - search [option]: List all avaliable time-zone.
+        - search [option]: Search in all avaliable time-zone.
         - add [time-zone]: Add time zone.
         - show [time-zone]&[time]: Show specific time.
         - erase [option]: Erase some or all tracked time zones.
