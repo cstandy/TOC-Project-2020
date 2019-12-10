@@ -434,7 +434,7 @@ class TocMachine(GraphMachine):
         tz_str = 'Tracked:\n'
         for i in range(len(self.tz_list)):
             tz_str =  tz_str + self.tz_list[i] + '\n'
-        tz_str.rstrip()
+        tz_str = tz_str.rstrip()
 
         # Send reply message
         reply_token = event.reply_token
