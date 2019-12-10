@@ -99,6 +99,7 @@ class TocMachine(GraphMachine):
         if (len(tz_str) <= 0 or len(tz_str) >= 2000):
             send_text_message(reply_token, "Output is out of range (not in 0-2000).")
         else:
+            tz_str = tz_str.rstrip()
             send_text_message(reply_token, tz_str)
         self.go_back()
 
@@ -186,22 +187,27 @@ class TocMachine(GraphMachine):
             # Try to get the cmd from 'help cmd'
             postfix = text.split(' ')[1].rstrip()
             if (postfix == 'list'):
-                info = info + "list\n"
+                info = info + "List tracked time zones with current time.\n\n"
+                info = info + "Usage: list\n\n"
                 info = info + "e.g. list"
             elif (postfix == 'search'):
-                info = info + "search [option]\n"
-                info = info + "- option: all or time-zone\n"
+                info = info + "List all avaliable time-zone.\n\n"
+                info = info + "Usage: search [option]\n"
+                info = info + "- option: all or time-zone\n\n"
                 info = info + "e.g. search all\n"
                 info = info + "e.g. search US"
             elif (postfix == 'add'):
-                info = info + "add [time-zone]\n"
+                info = info + "Add time zone.\n\n"
+                info = info + "Usage: add [time-zone]\n\n"
                 info = info + "e.g. add ROC"
             elif (postfix == 'show'):
-                info = info + "show [time-zone] [time]\n"
+                info = info + "Show specific time.\n\n"
+                info = info + "Usage: show [time-zone] [time]\n\n"
                 info = info + "e.g. show Tokyo 1600-02-29 13:56"
             elif (postfix == 'erase'):
-                info = info + "erase [option]\n"
-                info = info + "- option: all or time-zone\n"
+                info = info + "Erase some or all tracked time zones.\n\n"
+                info = info + "Usage: erase [option]\n"
+                info = info + "- option: all or time-zone\n\n"
                 info = info + "e.g. erase all\n"
                 info = info + "e.g. erase Tokyo"
         except:
@@ -209,17 +215,21 @@ class TocMachine(GraphMachine):
             info = info + "- list: List tracked time zones with current time.\n"
             info = info + "- search [option]: List all avaliable time-zone.\n"
             info = info + "- add [time-zone]: Add time zone.\n"
-            info = info + "- show [time-zone]&[time]: Show specific time.\n"
+            info = info + "- show [time-zone] [time]: Show specific time.\n"
             info = info + "- erase [option]: Erase some or all tracked time zones.\n"
             info = info + "- help [cmd]: Search for the usage of a command."
 
             # Create button menu
-            buttons = TemplateSendMessage(
+            buttons = [TemplateSendMessage(
                 alt_text=info, # Show if the button function is not avaliable
                 template=ButtonsTemplate(
                     title='Help Menu',
-                    text='Use "list" to list tracked time zone. Other options are:',
+                    text='Tap to see what I can do!',
                     actions=[
+                        MessageTemplateAction(
+                            label='list',
+                            text='help list'
+                        ),
                         MessageTemplateAction(
                             label='search',
                             text='help search'
@@ -227,7 +237,14 @@ class TocMachine(GraphMachine):
                         MessageTemplateAction(
                             label='add',
                             text='help add'
-                        ),
+                        )
+                    ]
+                )
+            ),TemplateSendMessage(
+                alt_text=info, # Show if the button function is not avaliable
+                template=ButtonsTemplate(
+                    text='Tap to see what I can do!',
+                    actions=[
                         MessageTemplateAction(
                             label='show',
                             text='help show'
@@ -235,10 +252,15 @@ class TocMachine(GraphMachine):
                         MessageTemplateAction(
                             label='erase',
                             text='help erase'
+                        ),
+                        MessageTemplateAction(
+                            label='help',
+                            text='help'
                         )
                     ]
                 )
             )
+            ]
 
             # Sent option message
             reply_token = event.reply_token
