@@ -94,7 +94,7 @@ class TocMachine(GraphMachine):
                     else:
                         tz_str = tz_str + tz_all[i] + '\n'
 
-        # Sent reply message
+        # Send reply message
         reply_token = event.reply_token
         if (len(tz_str) <= 0 or len(tz_str) >= 2000):
             send_text_message(reply_token, "Output is out of range (not in 0-2000).")
@@ -143,7 +143,7 @@ class TocMachine(GraphMachine):
             reply = postfix + " is already in the list or is not valid input."
             tz_str = "Tracked:" + tz_str
 
-        # Sent reply message
+        # Send reply message
         reply_token = event.reply_token
         if (len(reply) <= 0 or len(reply) >= 2000):
             send_text_message(reply_token, "Output is out of range (not in 0-2000).")
@@ -166,7 +166,7 @@ class TocMachine(GraphMachine):
             reply = reply + self.tz_list[i] + "\n" + cur_time.strftime(fmt) + "\n"
         reply = reply.rstrip() # Remove tailing new line
 
-        # Sent reply message
+        # Send reply message
         reply_token = event.reply_token
         if (len(reply) <= 0 or len(reply) >= 2000):
             send_text_message(reply_token, "Out of range (not in 0-2000).")
@@ -186,6 +186,72 @@ class TocMachine(GraphMachine):
         try:
             # Try to get the cmd from 'help cmd'
             postfix = text.split(' ')[1].rstrip()
+        except:
+            '''
+            For supported devices (iOS or Android), show button menu of command info.
+            For some unsupported devices (Windows), show following text message.
+            For other unsupported devices (Chrome extension), show unsupported message.
+            '''
+            info = info + "- list: List tracked time zones with current time.\n"
+            info = info + "- search [option]: List all avaliable time-zone.\n"
+            info = info + "- add [time-zone]: Add time zone.\n"
+            info = info + "- show [time-zone] [time]: Show specific time.\n"
+            info = info + "- erase [option]: Erase some or all tracked time zones.\n"
+            info = info + "- help [cmd]: Search for the usage of a command."
+
+            # Create button menu
+            buttons = [TemplateSendMessage(
+                alt_text=info, # Show if the button function is not avaliable
+                template=ButtonsTemplate(
+                    thumbnail_image_url='https://upload.cc/i1/2019/12/10/KdvL7Y.jpg',
+                    title='Help Menu',
+                    text='Tap to see what I can do!',
+                    actions=[
+                        MessageTemplateAction(
+                            label='list',
+                            text='help list'
+                        ),
+                        MessageTemplateAction(
+                            label='search',
+                            text='help search'
+                        ),
+                        MessageTemplateAction(
+                            label='add',
+                            text='help add'
+                        )
+                    ],
+                    default_action=MessageTemplateAction(label='help', text='help')
+                )
+            ),TemplateSendMessage(
+                alt_text=info, # Show if the button function is not avaliable
+                template=ButtonsTemplate(
+                    text='Tap to see what I can do!',
+                    actions=[
+                        MessageTemplateAction(
+                            label='show',
+                            text='help show'
+                        ),
+                        MessageTemplateAction(
+                            label='erase',
+                            text='help erase'
+                        ),
+                        MessageTemplateAction(
+                            label='help',
+                            text='help'
+                        )
+                    ],
+                    default_action=MessageTemplateAction(label='help', text='help')
+                )
+            )
+            ]
+
+            # Send option message (button menu)
+            reply_token = event.reply_token
+            send_button_message(reply_token, buttons)
+        else:
+            '''
+            For the command 'help cmd', get the postfix and reply the description and usage
+            '''
             if (postfix == 'list'):
                 info = info + "List tracked time zones with current time.\n\n"
                 info = info + "Usage: list\n\n"
@@ -210,62 +276,7 @@ class TocMachine(GraphMachine):
                 info = info + "- option: all or time-zone\n\n"
                 info = info + "e.g. erase all\n"
                 info = info + "e.g. erase Tokyo"
-        except:
-            # If the command is simply 'help'
-            info = info + "- list: List tracked time zones with current time.\n"
-            info = info + "- search [option]: List all avaliable time-zone.\n"
-            info = info + "- add [time-zone]: Add time zone.\n"
-            info = info + "- show [time-zone] [time]: Show specific time.\n"
-            info = info + "- erase [option]: Erase some or all tracked time zones.\n"
-            info = info + "- help [cmd]: Search for the usage of a command."
-
-            # Create button menu
-            buttons = [TemplateSendMessage(
-                alt_text=info, # Show if the button function is not avaliable
-                template=ButtonsTemplate(
-                    title='Help Menu',
-                    text='Tap to see what I can do!',
-                    actions=[
-                        MessageTemplateAction(
-                            label='list',
-                            text='help list'
-                        ),
-                        MessageTemplateAction(
-                            label='search',
-                            text='help search'
-                        ),
-                        MessageTemplateAction(
-                            label='add',
-                            text='help add'
-                        )
-                    ]
-                )
-            ),TemplateSendMessage(
-                alt_text=info, # Show if the button function is not avaliable
-                template=ButtonsTemplate(
-                    text='Tap to see what I can do!',
-                    actions=[
-                        MessageTemplateAction(
-                            label='show',
-                            text='help show'
-                        ),
-                        MessageTemplateAction(
-                            label='erase',
-                            text='help erase'
-                        ),
-                        MessageTemplateAction(
-                            label='help',
-                            text='help'
-                        )
-                    ]
-                )
-            )
-            ]
-
-            # Sent option message
-            reply_token = event.reply_token
-            send_button_message(reply_token, buttons)
-        else:
+            # Send text message
             reply_token = event.reply_token
             send_text_message(reply_token, info)
         
@@ -347,7 +358,7 @@ class TocMachine(GraphMachine):
                 reply = reply + self.tz_list[i] + "\n" + spc_time.strftime(fmt) + '\n'
             reply = reply.rstrip() # Remove tailing new line
         
-        # Sent reply message
+        # Send reply message
         reply_token = event.reply_token
         if (len(reply) <= 0 or len(reply) >= 2000):
             send_text_message(reply_token, "Out of range (not in 0-2000).")
@@ -396,7 +407,7 @@ class TocMachine(GraphMachine):
             tz_str =  tz_str + self.tz_list[i] + '\n'
         tz_str.rstrip()
 
-        # Sent reply message
+        # Send reply message
         reply_token = event.reply_token
         if (len(reply) <= 0 or len(reply) >= 2000):
             send_text_message(reply_token, "Out of range (not in 0-2000).")

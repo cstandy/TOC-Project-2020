@@ -129,6 +129,14 @@ The default tracked time zone is `Asia/Taipei`.
             Asia/Taipei
         ```
 * `help [cmd]`: Get usage information.
+    * For supported devices (iOS or Android), show button menu of command info.
+    ```
+    input:
+        help 
+    reply:
+        (2 button menus)
+    ```
+    * For some unsupported devices (Windows), show text message.
     ```
     input:
         help 
@@ -140,12 +148,22 @@ The default tracked time zone is `Asia/Taipei`.
         - erase [option]: Erase some or all tracked time zones.
         - help [cmd]: Search for the usage of a command.
     ```
+    * For other unsupported devices (Chrome extension), show unsupported message.
+    ```
+    input:
+        help 
+    reply:
+        Sorry, this message cannot be viewed. Please check it out on the smartphone version of LINE.
+    ```
     * The 'cmd' is the one listed above.
     ```
     input:
         help show
     reply:
+        Show specific time.
+
         show [time-zone] [time]
+
         e.g. show Tokyo 1600-02-29 13:56
     ```
 
@@ -261,3 +279,7 @@ Flask Architecture ❤️ [@Sirius207](https://github.com/Sirius207)
 [2020 TOC Project Slides](https://hackmd.io/@TTW/ToC-2019-Project#)
 
 [2018 TOC Project FAQ](https://hackmd.io/s/B1Xw7E8kN)
+
+[Line Bot Avatar Source](https://pixabay.com/illustrations/clock-digits-dial-pay-earth-globe-239725/) ❤️ pixabay.com
+
+[Time Zone Map of North America](https://whatsanswer.com/maps/time-zone-map-of-north-america/)
