@@ -367,7 +367,7 @@ class TocMachine(GraphMachine):
                 if (type(e) == pytz.exceptions.NonExistentTimeError):
                     print('Error: show an non-existent time due to daylight saving time.')
                     dst_info = "Error: Input an non-existent time due to daylight saving time.\n"
-            except:
+            except Exception as e:
                 input_failed = True
                 print(e)
 
