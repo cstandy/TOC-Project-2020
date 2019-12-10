@@ -128,16 +128,18 @@ class TocMachine(GraphMachine):
             tz_str =  tz_str + '\n' + self.tz_list[i]
 
         if (valid_in):
-            reply = "Add " + postfix + " success!\n\n" + "Tracked:" + tz_str
+            reply = "Add " + postfix + " success!"
+            tz_str = "Tracked:" + tz_str
         else:
-            reply = postfix + " is already in the list or is not valid input\n\n" + "Tracked:" + tz_str
+            reply = postfix + " is already in the list or is not valid input."
+            tz_str = "Tracked:" + tz_str
 
         # Sent reply message
         reply_token = event.reply_token
         if (len(reply) <= 0 or len(reply) >= 2000):
             send_text_message(reply_token, "Out of range (not in 0-2000).")
         else:
-            send_text_message(reply_token, reply)
+            send_text_message(reply_token, reply, tz_str)
         self.go_back()
 
     def on_exit_add(self):
