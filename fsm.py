@@ -218,7 +218,7 @@ class TocMachine(GraphMachine):
                 alt_text=info, # Show if the button function is not avaliable
                 template=ButtonsTemplate(
                     title='Help Menu',
-                    text='To list all tracked time zone, use "list". Otherwise, tap to see details.',
+                    text='Use "list" to list tracked time zone. Other options are:',
                     actions=[
                         MessageTemplateAction(
                             label='search',
