@@ -227,15 +227,15 @@ class TocMachine(GraphMachine):
                     text='Tap to see what I can do!',
                     actions=[
                         MessageTemplateAction(
-                            label='list',
+                            label='List',
                             text='help list'
                         ),
                         MessageTemplateAction(
-                            label='search',
+                            label='Search',
                             text='help search'
                         ),
                         MessageTemplateAction(
-                            label='add',
+                            label='Add',
                             text='help add'
                         )
                     ],
@@ -247,15 +247,15 @@ class TocMachine(GraphMachine):
                     text='Tap to see what I can do!',
                     actions=[
                         MessageTemplateAction(
-                            label='show',
+                            label='Show',
                             text='help show'
                         ),
                         MessageTemplateAction(
-                            label='erase',
+                            label='Erase',
                             text='help erase'
                         ),
                         MessageTemplateAction(
-                            label='help',
+                            label='Help',
                             text='help'
                         )
                     ],
@@ -326,8 +326,9 @@ class TocMachine(GraphMachine):
             time_in = text.split(' ', 2)[2]
         except:
             input_failed = True
-            info = "Invalid input, usage:\n"
-            info = info + "show [time-zone] [time]\n"
+            
+            info = info + "Invalid input\n\n"
+            info = info + "Usage: show [time-zone] [time]\n\n"
             info = info + "e.g. show Tokyo 1600-02-29 13:56"
             reply_token = event.reply_token
             send_text_message(reply_token, info)
@@ -369,12 +370,12 @@ class TocMachine(GraphMachine):
                     dst_info = "Error: Input an non-existent time due to daylight saving time.\n"
             except Exception as e:
                 input_failed = True
+                info = info + "Invalid input\n\n"
                 print(e)
 
         # Form output string
         if (input_failed or dst_failed):
-            info = info + "Usage:\n"
-            info = info + "show [time-zone] [time]\n"
+            info = info + "Usage: show [time-zone] [time]\n\n"
             info = info + "e.g. show Tokyo 1600-02-29 13:56"
             reply = info
         else:
