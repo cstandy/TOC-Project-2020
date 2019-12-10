@@ -268,19 +268,17 @@ class TocMachine(GraphMachine):
                     dst_info = "Error: Input an ambiguous time due to daylight saving time.\n"
                 if (type(e) == pytz.exceptions.NonExistentTimeError):
                     print('Error: show an non-existent time due to daylight saving time.')
-                    dst_info = "Error: Input an ambiguous time due to daylight saving time.\n"
+                    dst_info = "Error: Input an non-existent time due to daylight saving time.\n"
             except:
                 input_failed = True
                 print(e)
 
         # Form output string
-        if (input_failed):
+        if (input_failed or dst_failed):
             info = info + "Usage:\n"
             info = info + "show [time-zone] [time]\n"
             info = info + "e.g. show Tokyo 1600-02-29 13:56"
             reply = info
-        elif (dst_failed):
-            reply = dst_info
         else:
             for i in range(len(self.tz_list)):
                 spc_time = dt.astimezone(pytz.timezone(self.tz_list[i]))
@@ -291,6 +289,8 @@ class TocMachine(GraphMachine):
         reply_token = event.reply_token
         if (len(reply) <= 0 or len(reply) >= 2000):
             send_text_message(reply_token, "Out of range (not in 0-2000).")
+        elif (dst_failed):
+            send_text_message(reply_token, dst_info, reply)
         else:
             send_text_message(reply_token, reply)
         self.go_back()
