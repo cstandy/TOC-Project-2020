@@ -23,7 +23,7 @@ The default tracked time zone is `Asia/Taipei`.
 * `list`: List tracked time zones with current time.
     ```
     input:
-        search all
+        list
     reply:
         Asia/Taipei
         2019-12-09 13:25:36
@@ -59,6 +59,7 @@ The default tracked time zone is `Asia/Taipei`.
             add Tokyo
         reply:
             Add Tokyo success!
+        reply:
             Tracked:
             Asia/Taipei
             Asia/Tokyo
@@ -69,6 +70,7 @@ The default tracked time zone is `Asia/Taipei`.
             add US
         reply:
             Add US success!
+        reply:
             Tracked:
             Asia/Taipei
             Asia/Tokyo
@@ -77,16 +79,29 @@ The default tracked time zone is `Asia/Taipei`.
             ...
             US/Samoa
         ```
-* `show [time-zone]&[%Y-%m-%d %H:%M:%S]`: Show specific time.
-    * `%Y-%m-%d %H:%M:%S` is the time format.
+* `show [time-zone] [%Y-%m-%d %H:%M]`: Show specific time.
+    * `%Y-%m-%d %H:%M` is the time format.
         ```
         input:
-            show US/Eastern&2019-12-09 12:35:08
+            show US/Eastern 2019-12-09 12:35
         reply:
             Asia/Taipei
-            2019-12-10 01:31:08
+            2019-12-10 01:31
             Asia/Tokyo
-            2019-12-10 02:31:08
+            2019-12-10 02:31
+        ```
+    * Due to the daylight saving time, some errors might occur.
+        1. Ambiguous time (covered by both dst or not).
+        2. Non-existent time (skipped by dst).
+        ```
+        input:
+            show US/Eastern 2002-4-7 2:30
+        reply:
+            Error: Input an non-existent time due to daylight saving time.
+        reply:
+            Usage:
+            show [time-zone] [time]
+            e.g. show Tokyo 1600-02-29 13:56
         ```
 * `erase [option]`: Erase some or all tracked time zones.
     * `time-zone`: Remove certain time zone. The machine also accepts substrings.
@@ -95,6 +110,7 @@ The default tracked time zone is `Asia/Taipei`.
             erase Tokyo
         reply:
             Erase success!
+        reply:
             Tracked:
             Asia/Taipei
             US/Alaska
@@ -108,6 +124,7 @@ The default tracked time zone is `Asia/Taipei`.
             erase all
         reply:
             Erase success!
+        reply:
             Tracked:
             Asia/Taipei
         ```
