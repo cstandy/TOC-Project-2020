@@ -215,13 +215,19 @@ class TocMachine(GraphMachine):
     def on_enter_show(self, event):
         print("I'm entering show state")
 
-        # Input string pre-processing
         input_failed = False
+        dst_failed = False # Daylight saving time error notifier
+        dst_info = ''
+        info = ''
+        reply = ''
+
+        # Input string pre-processing
         text = event.message.text
         try:
             tz_in = text.split(' ', 2)[1]
             time_in = text.split(' ', 2)[2]
         except:
+            input_failed = True
             info = "Invalid input, usage:\n"
             info = info + "show [time-zone] [time]\n"
             info = info + "e.g. show Tokyo 1600-02-29 13:56"
@@ -250,18 +256,31 @@ class TocMachine(GraphMachine):
                 Based on pytz document, localize() must be used to solve this offset
                 '''
                 dt = pytz.timezone(tz_in).localize(dt, is_dst=None)
-            except Exception as e:
-                print(e)
+            except pytz.InvalidTimeError as e:
+                '''
+                Due to the argument is_dst=None in localize(), there might be errors in
+                daylight saving time boundaries. The first one is ambiguous time, and
+                the second one is non-existent time.
+                '''
+                dst_failed = True
+                if (type(e) == pytz.exceptions.AmbiguousTimeError):
+                    print('Error: show an ambiguous time due to daylight saving time.')
+                    dst_info = "Error: Input an ambiguous time due to daylight saving time.\n"
+                if (type(e) == pytz.exceptions.NonExistentTimeError):
+                    print('Error: show an non-existent time due to daylight saving time.')
+                    dst_info = "Error: Input an ambiguous time due to daylight saving time.\n"
+            except:
                 input_failed = True
-
-        reply = ''
+                print(e)
 
         # Form output string
         if (input_failed):
-            info = "Invalid input, usage:\n"
+            info = info + "Usage:\n"
             info = info + "show [time-zone] [time]\n"
             info = info + "e.g. show Tokyo 1600-02-29 13:56"
             reply = info
+        elif (dst_failed):
+            reply = dst_info
         else:
             for i in range(len(self.tz_list)):
                 spc_time = dt.astimezone(pytz.timezone(self.tz_list[i]))
