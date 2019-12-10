@@ -297,7 +297,7 @@ class TocMachine(GraphMachine):
                 info = info + "e.g. erase all\n"
                 info = info + "e.g. erase Tokyo"
             else:
-                info = "Not a valid command, use 'help' to see what I can do!")
+                info = "Not a valid command, use 'help' to see what I can do!"
             # Send text message
             reply_token = event.reply_token
             send_text_message(reply_token, info)
