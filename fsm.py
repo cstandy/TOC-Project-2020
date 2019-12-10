@@ -78,20 +78,25 @@ class TocMachine(GraphMachine):
             for i in range(len(tz_all)):
                 if postfix in tz_all[i]:
                     # Check if the search input is the prefix of the time zone (large region)
-                    if (postfix == tz_all[i].split('/')[0]):
-                        try:
-                            # Remove the prefix region to save word count
-                            prefix = tz_all[i].split('/')[0]
-                            prefix_len = len(prefix)
-                            tz_str = tz_str + tz_all[i][prefix_len:] + '\n'
-                        except:
-                            tz_str = tz_str + tz_all[i] + '\n'
+                    # Check also tz_all[i] is in the form 'region/location', e.g. 'US/Pacific'
+                    # not just a single location, e.g. 'ROC' since ROC == ROC.split('/')
+                    if (postfix == tz_all[i].split('/')[0] and '/' in tz_all[i]):
+                        # Remove the prefix region to save word count
+                        prefix = tz_all[i].split('/')[0]
+                        prefix_len = len(prefix)
+                        tz_str = tz_str + tz_all[i][prefix_len:] + '\n'
+                        # Notice that if list[i] end with '/', this action might
+                        # add an empty string in str. However, here it is not a case.
+
                     else:
                         tz_str = tz_str + tz_all[i] + '\n'
 
         # Sent reply message
         reply_token = event.reply_token
-        send_text_message(reply_token, tz_str)
+        if (len(tz_str) <= 0 or len(tz_str) >= 2000):
+            send_text_message(reply_token, "Output is out of range (not in 0-2000).")
+        else:
+            send_text_message(reply_token, tz_str)
         self.go_back()
 
     def on_exit_search(self):
@@ -137,7 +142,7 @@ class TocMachine(GraphMachine):
         # Sent reply message
         reply_token = event.reply_token
         if (len(reply) <= 0 or len(reply) >= 2000):
-            send_text_message(reply_token, "Out of range (not in 0-2000).")
+            send_text_message(reply_token, "Output is out of range (not in 0-2000).")
         else:
             send_text_message(reply_token, reply, tz_str)
         self.go_back()
