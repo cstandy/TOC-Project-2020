@@ -242,7 +242,14 @@ class TocMachine(GraphMachine):
         if (input_failed == False):
             try:
                 dt = datetime.strptime(time_in, fmt)
-                dt = dt.replace(tzinfo=pytz.timezone(tz_in))
+                # dt = dt.replace(tzinfo=pytz.timezone(tz_in))
+                '''
+                Due to the historical reason, tzinfo will have offset 
+                Reference: Mar 11th, 1911 Paris Time Change
+                    https://www.timeanddate.com/time/change/france/paris?year=1911
+                Based on pytz document, localize() must be used to solve this offset
+                '''
+                dt = pytz.timezone(tz_in).localize(dt, is_dst=None)
             except Exception as e:
                 print(e)
                 input_failed = True
