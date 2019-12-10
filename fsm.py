@@ -5,6 +5,9 @@ from utils import send_text_message
 import pytz # python time zone package
 from datetime import datetime # time processing
 
+# Line API for bottom template
+from linebot.models import TemplateSendMessage, ButtonsTemplate, MessageTemplateAction
+
 class TocMachine(GraphMachine):
     def __init__(self, **machine_configs):
         self.machine = GraphMachine(model=self, **machine_configs)
@@ -210,8 +213,40 @@ class TocMachine(GraphMachine):
             info = info + "- erase [option]: Erase some or all tracked time zones.\n"
             info = info + "- help [cmd]: Search for the usage of a command."
 
-        reply_token = event.reply_token
-        send_text_message(reply_token, info)
+            # Create button menu
+            buttons = TemplateSendMessage(
+                alt_text=info, # Show if the button function is not avaliable
+                template=ButtonsTemplate(
+                    title='Help Menu',
+                    text='To list all tracked time zone, use "list". Otherwise, tap to see details.',
+                    actions=[
+                        MessageTemplateAction(
+                            label='search',
+                            text='help search'
+                        ),
+                        MessageTemplateAction(
+                            label='add',
+                            text='help add'
+                        ),
+                        MessageTemplateAction(
+                            label='show',
+                            text='help show'
+                        ),
+                        MessageTemplateAction(
+                            label='erase',
+                            text='help erase'
+                        )
+                    ]
+                )
+            )
+
+            # Sent option message
+            reply_token = event.reply_token
+            send_button_message(reply_token, buttons)
+        else:
+            reply_token = event.reply_token
+            send_text_message(reply_token, info)
+        
         self.go_back()
 
     def on_exit_help(self):
