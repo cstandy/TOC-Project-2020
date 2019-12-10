@@ -302,16 +302,18 @@ class TocMachine(GraphMachine):
         self.tz_list = tmp_list
 
         # Form output string
-        reply = 'Erase success!\n\nTracked:'
+        reply = 'Erase success!'
+        tz_str = ''
         for i in range(len(self.tz_list)):
-            reply =  reply + '\n' + self.tz_list[i]
+            tz_str =  tz_str + self.tz_list[i] + '\n'
+        tz_str.rstrip()
 
         # Sent reply message
         reply_token = event.reply_token
         if (len(reply) <= 0 or len(reply) >= 2000):
             send_text_message(reply_token, "Out of range (not in 0-2000).")
         else:
-            send_text_message(reply_token, reply)
+            send_text_message(reply_token, reply, tz_str)
         self.go_back()
 
     def on_exit_erase(self):
